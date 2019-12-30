@@ -5,7 +5,6 @@ async function run() {
   try {
     let version = core.getInput("smlnj-version");
     await installer.getNJ(version);
-    //
   } catch (error) {
     core.setFailed(error.message);
   }

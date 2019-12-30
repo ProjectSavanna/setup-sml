@@ -38,7 +38,7 @@ async function acquireNJ(version: string): Promise<string> {
 
   let extPath = await tc.extractTar(downloadPath);
 
-  await exec.exec(path.join(extPath, "config", "install.sh"));
+  await exec.exec(path.join("config", "install.sh"), [], { cwd: extPath });
 
   return await tc.cacheDir(extPath, "smlnj", format(version));
 }
