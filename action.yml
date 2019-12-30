@@ -4,6 +4,7 @@ author: '15150'
 inputs:
   smlnj-version:
     description: 'Exact version of SML/NJ to use.'
+    required: true
 runs:
   using: 'node12'
   main: 'lib/setup-sml.js'
