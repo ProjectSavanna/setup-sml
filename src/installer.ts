@@ -20,6 +20,18 @@ export async function getNJ(version: string) {
 }
 
 async function acquireNJ(version: string): Promise<string> {
+  if (process.platform === "linux") {
+    // install required 32-bit support libraries
+    await exec.exec("sudo", [
+      "apt-get",
+      "install",
+      "-y",
+      "gcc-multilib",
+      "lib32ncurses5",
+      "lib32z1"
+    ]);
+  }
+
   let downloadUrl: string = util.format(
     "http://smlnj.cs.uchicago.edu/dist/working/%s/config.tgz",
     version
