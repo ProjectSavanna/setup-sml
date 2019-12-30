@@ -1,0 +1,34 @@
+{
+  "name": "setup-sml",
+  "version": "1.0.0",
+  "description": "setup sml action",
+  "main": "lib/setup-sml.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CMU-15150/setup-sml.git"
+  },
+  "keywords": [
+    "actions",
+    "sml",
+    "smlnj",
+    "setup"
+  ],
+  "author": "15150",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CMU-15150/setup-sml/issues"
+  },
+  "homepage": "https://github.com/CMU-15150/setup-sml#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.0",
+    "@actions/exec": "^1.0.2",
+    "@actions/tool-cache": "^1.1.2",
+    "@types/node": "^13.1.2"
+  },
+  "devDependencies": {
+    "prettier": "1.19.1"
+  }
+}

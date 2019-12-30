@@ -1,0 +1,9 @@
+name: 'Setup SML environment'
+description: 'Setup a SML environment and add it to the PATH'
+author: '15150'
+inputs:
+  smlnj-version:
+    description: 'Exact version of SML/NJ to use.'
+runs:
+  using: 'node12'
+  main: 'lib/setup-sml.js'
