@@ -22,6 +22,7 @@ export async function getNJ(version: string) {
 async function acquireNJ(version: string): Promise<string> {
   if (process.platform === "linux") {
     // install required 32-bit support libraries
+    await exec.exec("sudo", ["apt-get", "update"]);
     await exec.exec("sudo", [
       "apt-get",
       "install",
