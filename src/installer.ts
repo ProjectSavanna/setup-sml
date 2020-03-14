@@ -27,6 +27,7 @@ async function acquireNJ(version: string): Promise<string> {
       "apt-get",
       "install",
       "-y",
+      "--no-install-recommends",
       "gcc-multilib",
       "lib32ncurses5",
       "lib32z1"
