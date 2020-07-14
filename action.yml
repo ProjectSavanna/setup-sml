@@ -1,6 +1,6 @@
 name: 'Setup SML environment'
 description: 'Setup a SML environment and add it to the PATH'
-author: '15150'
+author: 'Project Savanna'
 inputs:
   smlnj-version:
     description: 'Exact version of SML/NJ to use.'
