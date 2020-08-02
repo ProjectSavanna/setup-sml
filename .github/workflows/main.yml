@@ -17,4 +17,3 @@ jobs:
       - uses: ./
         with:
           smlnj-version: ${{ matrix.smlnj-version }}
-      - run: [[ "$(sml @SMLversion)" == "sml ${{ matrix.smlnj-version }}" ]]
