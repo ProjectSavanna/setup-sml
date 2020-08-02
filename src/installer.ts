@@ -54,7 +54,11 @@ async function acquireNJ(version: string): Promise<string> {
 
   if (process.platform == "win32") {
     await exec.exec("sh", [path.join("config", "prepare-win-install.sh")], {
-      cwd: extPath
+      cwd: extPath,
+      env: {
+        ...process.env,
+        URLGETTER: "curl"
+      }
     });
     await exec.exec(path.join("config", "install.bat"), [], { cwd: extPath });
   } else {
