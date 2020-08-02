@@ -1,0 +1,21 @@
+name: build-test
+
+on: [push, pull_request]
+
+jobs:
+  install-sml:
+    name: SML/NJ ${{ matrix.smlnj-version }} - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        smlnj-version: [110.81, 110.87, 110.97, 110.98]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          smlnj-version: ${{ matrix.smlnj-version }}
+      - run: |
+          [[ $(sml @SMLversion) == "sml ${{ matrix.smlnj-version }}" ]]
