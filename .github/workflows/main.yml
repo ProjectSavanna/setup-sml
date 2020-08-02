@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   install-sml:
     name: "SML/NJ ${{ matrix.smlnj-version }}, - ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
