@@ -53,7 +53,7 @@ async function acquireNJ(version: string): Promise<string> {
   let extPath = await tc.extractTar(downloadPath);
 
   if (process.platform == "win32") {
-    await exec.exec(path.join("config", "prepare-win-install.sh"), [], {
+    await exec.exec("sh", [path.join("config", "prepare-win-install.sh")], {
       cwd: extPath
     });
     await exec.exec(path.join("config", "install.bat"), [], { cwd: extPath });
