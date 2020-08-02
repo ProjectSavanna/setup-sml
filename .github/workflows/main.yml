@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        smlnj-version: [110.81, 110.97, 110.97, 110.98]
+        smlnj-version: [110.81, 110.87, 110.97, 110.98]
 
     steps:
       - uses: actions/checkout@v2
