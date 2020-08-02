@@ -23,4 +23,4 @@ jobs:
         with:
           smlnj-version: ${{ matrix.smlnj-version }}
       - run: |
-          [[ $(sml @SMLversion) == "sml ${{ matrix.smlnj-version }}" ]]
+          sh -c '[ "$(sml @SMLversion)" = "sml ${{ matrix.smlnj-version }}" ]'
