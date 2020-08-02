@@ -1,5 +1,5 @@
-name: 'Setup SML environment'
-description: 'Setup a SML environment and add it to the PATH'
+name: 'Setup SML'
+description: 'Set up a Standard ML environment and add it to the PATH'
 author: 'Project Savanna'
 inputs:
   smlnj-version:
@@ -8,3 +8,6 @@ inputs:
 runs:
   using: 'node12'
   main: 'lib/setup-sml.js'
+branding:
+  icon: 'code'
+  color: 'yellow'
