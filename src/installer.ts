@@ -21,7 +21,7 @@ export async function getNJ(version: string) {
 
 async function acquireNJ(version: string): Promise<string> {
   switch (version) {
-    case "windows":
+    case "win32":
       return acquireNJWindows(version);
     case "linux":
       return acquireNJLinux(version);
@@ -67,7 +67,7 @@ async function acquireNJLinux(version: string): Promise<string> {
     "lib32z1"
   ]);
 
-  acquireNJUnix(version);
+  return acquireNJUnix(version);
 }
 
 async function acquireNJUnix(version: string): Promise<string> {
