@@ -22,5 +22,11 @@ jobs:
       - uses: ./
         with:
           smlnj-version: ${{ matrix.smlnj-version }}
-      - run: |
-          sh -c '[ "$(sml @SMLversion)" = "sml ${{ matrix.smlnj-version }}" ]'
+      - name: Test version output (Unix)
+        if: ${{ matrix.os }} != 'windows-latest'
+        run: |
+          [[ $(sml @SMLversion) == "sml ${{ matrix.smlnj-version }}" ]]
+      - name: Test version output (Windows)
+        if: ${{ matrix.os }} == 'windows-latest'
+        run: |
+          "$(sml @SMLversion)" -eq "sml ${{ matrix.smlnj-version }}"
