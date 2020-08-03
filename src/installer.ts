@@ -20,7 +20,7 @@ export async function getNJ(version: string) {
 }
 
 async function acquireNJ(version: string): Promise<string> {
-  switch (version) {
+  switch (process.platform) {
     case "win32":
       return acquireNJWindows(version);
     case "linux":
