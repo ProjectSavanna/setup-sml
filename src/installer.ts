@@ -20,20 +20,57 @@ export async function getNJ(version: string) {
 }
 
 async function acquireNJ(version: string): Promise<string> {
-  if (process.platform === "linux") {
-    // install required 32-bit support libraries
-    await exec.exec("sudo", ["apt-get", "update"]);
-    await exec.exec("sudo", [
-      "apt-get",
-      "install",
-      "-y",
-      "--no-install-recommends",
-      "gcc-multilib",
-      "lib32ncurses5",
-      "lib32z1"
-    ]);
+  switch (version) {
+    case "windows":
+      return acquireNJWindows(version);
+    case "linux":
+      return acquireNJLinux(version);
+    default:
+      return acquireNJUnix(version);
+  }
+}
+
+async function acquireNJWindows(version: string): Promise<string> {
+  let downloadUrl: string = util.format(
+    "https://smlnj.org/dist/working/%s/smlnj-%s.msi",
+    version,
+    version
+  );
+
+  core.debug("Downloading SML/NJ from: " + downloadUrl);
+
+  let downloadPath: string | null = null;
+  try {
+    downloadPath = await tc.downloadTool(downloadUrl);
+  } catch (error) {
+    core.debug(error);
+
+    throw `Failed to download version ${version}: ${error}`;
   }
 
+  await exec.exec("msiexec", ["/qn", "/i", downloadPath]);
+  return new Promise((resolve, _) =>
+    resolve(path.join("C:", "Program Files (x86)", "SMLNJ"))
+  );
+}
+
+async function acquireNJLinux(version: string): Promise<string> {
+  // install required 32-bit support libraries
+  await exec.exec("sudo", ["apt-get", "update"]);
+  await exec.exec("sudo", [
+    "apt-get",
+    "install",
+    "-y",
+    "--no-install-recommends",
+    "gcc-multilib",
+    "lib32ncurses5",
+    "lib32z1"
+  ]);
+
+  acquireNJUnix(version);
+}
+
+async function acquireNJUnix(version: string): Promise<string> {
   let downloadUrl: string = util.format(
     "http://smlnj.cs.uchicago.edu/dist/working/%s/config.tgz",
     version
@@ -52,24 +89,7 @@ async function acquireNJ(version: string): Promise<string> {
 
   let extPath = await tc.extractTar(downloadPath);
 
-  if (process.platform == "win32") {
-    await exec.exec("sh", [path.join("config", "prepare-win-install.sh")], {
-      cwd: extPath,
-      env: {
-        ...process.env,
-        URLGETTER: "curl"
-      }
-    });
-    await exec.exec(path.join("config", "install.bat"), [], {
-      cwd: extPath,
-      env: {
-        ...process.env,
-        SMLNJ_HOME: extPath
-      }
-    });
-  } else {
-    await exec.exec(path.join("config", "install.sh"), [], { cwd: extPath });
-  }
+  await exec.exec(path.join("config", "install.sh"), [], { cwd: extPath });
 
   return await tc.cacheDir(extPath, "smlnj", format(version));
 }
