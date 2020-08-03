@@ -57,7 +57,8 @@ async function acquireNJ(version: string): Promise<string> {
       cwd: extPath,
       env: {
         ...process.env,
-        URLGETTER: "curl"
+        URLGETTER: "curl",
+        SMLNJ_HOME: extPath
       }
     });
     await exec.exec(path.join("config", "install.bat"), [], { cwd: extPath });
