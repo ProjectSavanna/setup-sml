@@ -28,5 +28,4 @@ jobs:
           [[ $(sml @SMLversion) == "sml ${{ matrix.smlnj-version }}" ]]
       - name: Test version output (Windows)
         if: matrix.os == 'windows-latest'
-        run: |
-          "$(sml @SMLversion)" -eq "sml ${{ matrix.smlnj-version }}"
+        run: sml @SMLversion
