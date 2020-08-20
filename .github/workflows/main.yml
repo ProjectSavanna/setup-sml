@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         smlnj-version: [110.87, 110.97, 110.98]
         exclude:
           # SML/NJ versions before 110.94 do not support 64-bit
@@ -22,5 +22,12 @@ jobs:
       - uses: ./
         with:
           smlnj-version: ${{ matrix.smlnj-version }}
-      - run: |
+      - name: Test version output (Unix)
+        if: matrix.os != 'windows-latest'
+        run: |
           [[ $(sml @SMLversion) == "sml ${{ matrix.smlnj-version }}" ]]
+      - name: Test version output (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          # "$(sml @SMLversion)" -eq "sml ${{ matrix.smlnj-version }}"
+          Get-Command sml
