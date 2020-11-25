@@ -29,6 +29,6 @@
     "@types/node": "^13.13.33"
   },
   "devDependencies": {
-    "prettier": "1.19.1"
+    "prettier": "2.2.0"
   }
 }
