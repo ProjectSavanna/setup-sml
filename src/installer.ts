@@ -56,7 +56,7 @@ async function acquireNJWindows(version: string): Promise<string> {
 }
 
 function defaultBits(version: string): 32 | 64 {
-  return semver.satisfies(version, ">=110.98") ? 64 : 32;
+  return semver.satisfies(format(version), ">=110.98") ? 64 : 32;
 }
 
 async function acquireNJLinux(version: string): Promise<string> {
