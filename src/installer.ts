@@ -1,6 +1,7 @@
 import * as core from "@actions/core";
 import * as exec from "@actions/exec";
 import * as tc from "@actions/tool-cache";
+import * as semver from "semver";
 import * as path from "path";
 import * as util from "util";
 
@@ -54,18 +55,25 @@ async function acquireNJWindows(version: string): Promise<string> {
   );
 }
 
+function defaultBits(version: string): 32 | 64 {
+  return semver.satisfies(version, ">=110.98") ? 64 : 32;
+}
+
 async function acquireNJLinux(version: string): Promise<string> {
-  // install required 32-bit support libraries
-  await exec.exec("sudo", ["apt-get", "update"]);
-  await exec.exec("sudo", [
-    "apt-get",
-    "install",
-    "-y",
-    "--no-install-recommends",
-    "gcc-multilib",
-    "lib32ncurses5",
-    "lib32z1"
-  ]);
+  if (defaultBits(version) == 32) {
+    // install 32-bit support libraries
+    await exec.exec("sudo", ["dpkg", "--add-architecture", "i386"]);
+    await exec.exec("sudo", ["apt-get", "update"]);
+    await exec.exec("sudo", ["apt-get", "libc6:i386"]);
+    await exec.exec("sudo", [
+      "apt-get",
+      "install",
+      "-y",
+      "--no-install-recommends",
+      "gcc-multilib",
+      "g++-multilib"
+    ]);
+  }
 
   return acquireNJUnix(version);
 }
@@ -94,4 +102,4 @@ async function acquireNJUnix(version: string): Promise<string> {
   return await tc.cacheDir(extPath, "smlnj", format(version));
 }
 
-const format = (version: string) => version + ".0";
+const format = (version: string) => "0." + version;
