@@ -102,4 +102,11 @@ async function acquireNJUnix(version: string): Promise<string> {
   return await tc.cacheDir(extPath, "smlnj", format(version));
 }
 
-const format = (version: string) => "0." + version;
+function format(version: string): string {
+  let result: string | null = semver.valid(semver.coerce(version));
+  if (result == null) {
+    core.debug(`Unable to coerce to a valid semver: ${version}`);
+    throw `Unable to coerce to a valid semver: ${version}`;
+  }
+  return result;
+}
