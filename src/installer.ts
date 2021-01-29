@@ -64,7 +64,7 @@ async function acquireNJLinux(version: string): Promise<string> {
     // install 32-bit support libraries
     await exec.exec("sudo", ["dpkg", "--add-architecture", "i386"]);
     await exec.exec("sudo", ["apt-get", "update"]);
-    await exec.exec("sudo", ["apt-get", "libc6:i386"]);
+    await exec.exec("sudo", ["apt-get", "install", "libc6:i386"]);
     await exec.exec("sudo", [
       "apt-get",
       "install",
