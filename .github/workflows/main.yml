@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        smlnj-version: [110.87, 110.97, 110.98, 110.98.1, 110.99]
+        smlnj-version: [110.87, 110.97, 110.98, 110.98.1, 110.99, 110.99.1]
         exclude:
           # SML/NJ versions before 110.94 do not support 64-bit
           - os: macos-latest
