@@ -31,6 +31,6 @@
     "semver": "^7.3.5"
   },
   "devDependencies": {
-    "prettier": "2.3.2"
+    "prettier": "2.4.1"
   }
 }
