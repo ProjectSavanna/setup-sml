@@ -21,6 +21,9 @@ jobs:
           # SML/NJ versions before 110.94 do not support 64-bit
           - os: macos-latest
             smlnj-version: 110.87
+          # SML/NJ versions before 110.98 do not support Big Sur
+          - os: macos-latest
+            smlnj-version: 110.97
 
     steps:
       - uses: actions/checkout@v2.4.0
