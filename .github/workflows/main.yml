@@ -26,7 +26,7 @@ jobs:
             smlnj-version: 110.97
 
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
       - uses: ./
         with:
           smlnj-version: ${{ matrix.smlnj-version }}
