@@ -12,12 +12,16 @@ export async function getNJ(version: string) {
 
   // download if not cached
   if (!toolPath) {
-    toolPath = await acquireNJ(version);
-    core.debug("SML/NJ is cached under " + toolPath);
+    try {
+      toolPath = await acquireNJ(version);
+      core.debug("SML/NJ is cached under " + toolPath);
+    } catch (_) { }
   }
 
-  // add bin to path
-  core.addPath(path.join(toolPath, "bin"));
+  if (toolPath) {
+    // add bin to path
+    core.addPath(path.join(toolPath, "bin"));
+  }
 }
 
 async function acquireNJ(version: string): Promise<string> {
@@ -26,8 +30,10 @@ async function acquireNJ(version: string): Promise<string> {
       return acquireNJWindows(version);
     case "linux":
       return acquireNJLinux(version);
+    case "darwin":
+      return acquireNJMacOS(version);
     default:
-      return acquireNJUnix(version);
+      throw `Unknown platform: ${process.platform}`;
   }
 }
 
@@ -109,4 +115,29 @@ function format(version: string): string {
     throw `Unable to coerce to a valid semver: ${version}`;
   }
   return result;
+}
+
+async function acquireNJMacOS(version: string): Promise<string> {
+  let architecture = defaultBits(version) == 32 ? "x86" : "amd64";
+
+  let downloadUrl: string = util.format(
+    "https://smlnj.org/dist/working/%s/smlnj-%s-%s.msi",
+    version,
+    architecture,
+    version
+  );
+
+  core.debug("Downloading SML/NJ from: " + downloadUrl);
+
+  let downloadPath: string | null = null;
+  try {
+    downloadPath = await tc.downloadTool(downloadUrl);
+  } catch (error) {
+    core.debug(error);
+
+    throw `Failed to download version ${version}: ${error}`;
+  }
+
+  await exec.exec("sudo", ["installer", "-pkg", downloadPath, "-target", "/"]);
+  return Promise.reject(new Error("installation on macOS does not cache"));
 }
