@@ -12,16 +12,12 @@ export async function getNJ(version: string) {
 
   // download if not cached
   if (!toolPath) {
-    try {
-      toolPath = await acquireNJ(version);
-      core.debug("SML/NJ is cached under " + toolPath);
-    } catch (_) { }
+    toolPath = await acquireNJ(version);
+    core.debug("SML/NJ is cached under " + toolPath);
   }
 
-  if (toolPath) {
-    // add bin to path
-    core.addPath(path.join(toolPath, "bin"));
-  }
+  // add bin to path
+  core.addPath(path.join(toolPath, "bin"));
 }
 
 async function acquireNJ(version: string): Promise<string> {
@@ -56,9 +52,7 @@ async function acquireNJWindows(version: string): Promise<string> {
   }
 
   await exec.exec("msiexec", ["/qn", "/i", downloadPath]);
-  return new Promise((resolve, _) =>
-    resolve(path.join("C:", "Program Files (x86)", "SMLNJ"))
-  );
+  return Promise.resolve(path.join("C:", "Program Files (x86)", "SMLNJ"));
 }
 
 function defaultBits(version: string): 32 | 64 {
@@ -121,7 +115,7 @@ async function acquireNJMacOS(version: string): Promise<string> {
   let architecture = defaultBits(version) == 32 ? "x86" : "amd64";
 
   let downloadUrl: string = util.format(
-    "https://smlnj.org/dist/working/%s/smlnj-%s-%s.msi",
+    "https://smlnj.org/dist/working/%s/smlnj-%s-%s.pkg",
     version,
     architecture,
     version
@@ -139,5 +133,5 @@ async function acquireNJMacOS(version: string): Promise<string> {
   }
 
   await exec.exec("sudo", ["installer", "-pkg", downloadPath, "-target", "/"]);
-  return Promise.reject(new Error("installation on macOS does not cache"));
+  return Promise.resolve(path.join(path.sep, "usr", "local", "smlnj"));
 }
