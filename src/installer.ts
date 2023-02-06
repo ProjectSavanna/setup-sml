@@ -24,12 +24,15 @@ async function acquireNJ(version: string): Promise<string> {
   switch (process.platform) {
     case "win32":
       return acquireNJWindows(version);
+    case "darwin":
+      return acquireNJMacOS(version);
     case "linux":
       return acquireNJLinux(version);
     default:
-      return acquireNJUnix(version);
+      throw `Unknown platform: ${process.platform}`;
   }
 }
+
 
 async function acquireNJWindows(version: string): Promise<string> {
   let downloadUrl: string = util.format(
@@ -50,10 +53,37 @@ async function acquireNJWindows(version: string): Promise<string> {
   }
 
   await exec.exec("msiexec", ["/qn", "/i", downloadPath]);
-  return new Promise((resolve, _) =>
-    resolve(path.join("C:", "Program Files (x86)", "SMLNJ"))
-  );
+  return Promise.resolve(path.join("C:", "Program Files (x86)", "SMLNJ"));
 }
+
+
+async function acquireNJMacOS(version: string): Promise<string> {
+  let architecture = defaultBits(version) == 32 ? "x86" : "amd64";
+
+  let filename: string = util.format("smlnj-%s-%s.pkg", architecture, version);
+  let downloadUrl: string = util.format(
+    "https://smlnj.org/dist/working/%s/%s",
+    version,
+    filename
+  );
+
+  core.debug("Downloading SML/NJ from: " + downloadUrl);
+
+  let runnerTemp: string = process.env['RUNNER_TEMP'] || '';
+
+  let downloadPath: string | null = null;
+  try {
+    downloadPath = await tc.downloadTool(downloadUrl, path.join(runnerTemp, filename));
+  } catch (error) {
+    core.debug(error);
+
+    throw `Failed to download version ${version}: ${error}`;
+  }
+
+  await exec.exec("sudo", ["installer", "-pkg", downloadPath, "-target", "/"]);
+  return Promise.resolve(path.join(path.sep, "usr", "local", "smlnj"));
+}
+
 
 function defaultBits(version: string): 32 | 64 {
   return semver.satisfies(format(version), ">=110.98") ? 64 : 32;
