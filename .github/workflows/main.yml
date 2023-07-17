@@ -29,9 +29,11 @@ jobs:
           - os: macos-11
             smlnj-version: 110.97
           # SML/NJ 2022.1 does not support Linux or Windows
-          - os: ubuntu-*
+          - os: ubuntu-latest
             smlnj-version: 2022.1
-          - os: windows-*
+          - os: ubuntu-20.04
+            smlnj-version: 2022.1
+          - os: windows-latest
             smlnj-version: 2022.1
         include:
           - os: macos-latest
