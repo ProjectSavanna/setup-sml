@@ -44,7 +44,7 @@ jobs:
             smlnj-version: 2022.1
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           smlnj-version: ${{ matrix.smlnj-version }}
