@@ -38,18 +38,38 @@ async function acquireNJ(version: string): Promise<string> {
 }
 
 
+function defaultBits(version: string): 32 | 64 {
+  return semver.satisfies(format(version), ">=110.98") ? 64 : 32;
+}
+
+function getArchitecture(version: string): string {
+  switch (process.platform) {
+    case "darwin":
+      return defaultBits(version) == 32 ? "x86" :
+        process.arch.startsWith("arm") ? "arm64" : "amd64";
+    case "linux":
+      return "amd64";
+    default:
+      throw `Unknown architecture for platform ${process.platform}`;
+  }
+}
+
+
 async function acquireNJGitHub(version: string): Promise<string> {
   await exec.exec("git", ["clone", "https://github.com/smlnj/smlnj.git"]);
 
+  let filename: string = util.format("boot.%s-unix.tgz", getArchitecture(version))
+
   let downloadUrl: string = util.format(
-    "https://smlnj.org/dist/working/%s/boot.amd64-unix.tgz",
-    version
+    "https://smlnj.org/dist/working/%s/%s",
+    version,
+    filename
   );
 
   core.debug("Downloading SML/NJ from: " + downloadUrl);
 
   try {
-    await tc.downloadTool(downloadUrl, path.join("smlnj", "boot.amd64-unix.tgz"));
+    await tc.downloadTool(downloadUrl, path.join("smlnj", filename));
   } catch (error) {
     let message = 'Unknown Error';
     if (error instanceof Error) message = error.message;
@@ -89,7 +109,7 @@ async function acquireNJWindows(version: string): Promise<string> {
 
 
 async function acquireNJMacOS(version: string): Promise<string> {
-  let architecture = defaultBits(version) == 32 ? "x86" : "amd64";
+  let architecture = getArchitecture(version);
 
   let filename: string = util.format("smlnj-%s-%s.pkg", architecture, version);
   let downloadUrl: string = util.format(
@@ -115,11 +135,6 @@ async function acquireNJMacOS(version: string): Promise<string> {
 
   await exec.exec("sudo", ["installer", "-pkg", downloadPath, "-target", "/"]);
   return Promise.resolve(path.join(path.sep, "usr", "local", "smlnj"));
-}
-
-
-function defaultBits(version: string): 32 | 64 {
-  return semver.satisfies(format(version), ">=110.98") ? 64 : 32;
 }
 
 async function acquireNJLinux(version: string): Promise<string> {
