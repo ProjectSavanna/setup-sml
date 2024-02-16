@@ -15,8 +15,51 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        smlnj-version: [2023.1]
+        os: [ubuntu-20.04, ubuntu-latest, macos-11, windows-latest]
+        smlnj-version: [110.87, 110.97, 110.98, 110.98.1, 110.99, 110.99.2, 110.99.3, 110.99.4, 2022.1, 2023.1]
+        exclude:
+          # 32-bit dependencies do not install on Ubuntu 22.04+
+          - os: ubuntu-latest
+            smlnj-version: 110.87
+          - os: ubuntu-latest
+            smlnj-version: 110.97
+          # SML/NJ versions before 110.98 do not support Big Sur
+          - os: macos-11
+            smlnj-version: 110.87
+          - os: macos-11
+            smlnj-version: 110.97
+          # SML/NJ 2022.1 does not support Linux or Windows
+          - os: ubuntu-latest
+            smlnj-version: 2022.1
+          - os: ubuntu-20.04
+            smlnj-version: 2022.1
+          - os: windows-latest
+            smlnj-version: 2022.1
+        include:
+          - os: macos-latest
+            smlnj-version: 110.99.2
+          - os: macos-latest
+            smlnj-version: 110.99.3
+          - os: macos-latest
+            smlnj-version: 110.99.4
+          - os: macos-latest
+            smlnj-version: 2022.1
+          - os: macos-latest
+            smlnj-version: 2023.1
+          - os: macos-13
+            smlnj-version: 110.99.3
+          - os: macos-13
+            smlnj-version: 110.99.4
+          - os: macos-13
+            smlnj-version: 2022.1
+          - os: macos-13
+            smlnj-version: 2023.1
+          - os: macos-14
+            smlnj-version: 110.99.4
+          - os: macos-14
+            smlnj-version: 2022.1
+          - os: macos-14
+            smlnj-version: 2023.1
 
     steps:
       - uses: actions/checkout@v4
