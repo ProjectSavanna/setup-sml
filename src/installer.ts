@@ -58,6 +58,7 @@ function getArchitecture(version: string, armAllowed: boolean = false): string {
 async function acquireNJGitHub(version: string): Promise<string> {
   await exec.exec("git", ["clone", "https://github.com/smlnj/smlnj.git"]);
 
+  console.log(process.platform, process.arch, getArchitecture(version, true))
   let filename: string = util.format("boot.%s-unix.tgz", getArchitecture(version, true))
 
   let downloadUrl: string = util.format(
