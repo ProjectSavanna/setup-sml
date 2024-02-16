@@ -47,7 +47,9 @@ async function acquireNJWindows(version: string): Promise<string> {
   try {
     downloadPath = await tc.downloadTool(downloadUrl);
   } catch (error) {
-    core.debug(error);
+    let message = 'Unknown Error';
+    if (error instanceof Error) message = error.message;
+    core.debug(message);
 
     throw `Failed to download version ${version}: ${error}`;
   }
@@ -75,7 +77,9 @@ async function acquireNJMacOS(version: string): Promise<string> {
   try {
     downloadPath = await tc.downloadTool(downloadUrl, path.join(runnerTemp, filename));
   } catch (error) {
-    core.debug(error);
+    let message = 'Unknown Error';
+    if (error instanceof Error) message = error.message;
+    core.debug(message);
 
     throw `Failed to download version ${version}: ${error}`;
   }
@@ -120,7 +124,9 @@ async function acquireNJUnix(version: string): Promise<string> {
   try {
     downloadPath = await tc.downloadTool(downloadUrl);
   } catch (error) {
-    core.debug(error);
+    let message = 'Unknown Error';
+    if (error instanceof Error) message = error.message;
+    core.debug(message);
 
     throw `Failed to download version ${version}: ${error}`;
   }
