@@ -48,7 +48,7 @@ async function acquireNJGitHub(version: string): Promise<string> {
   core.debug("Downloading SML/NJ from: " + downloadUrl);
 
   try {
-    await tc.downloadTool(downloadUrl, "smlnj");
+    await tc.downloadTool(downloadUrl, path.join("smlnj", "boot.amd64-unix.tgz"));
   } catch (error) {
     let message = 'Unknown Error';
     if (error instanceof Error) message = error.message;
