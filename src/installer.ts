@@ -57,7 +57,7 @@ async function acquireNJGitHub(version: string): Promise<string> {
     throw `Failed to download version ${version}: ${error}`;
   }
 
-  await exec.exec(path.join("smlnj", "build.sh"), [], { cwd: "smlnj" });
+  await exec.exec("build.sh", [], { cwd: "smlnj" });
 
   return await tc.cacheDir("smlnj", "smlnj", format(version));
 }
