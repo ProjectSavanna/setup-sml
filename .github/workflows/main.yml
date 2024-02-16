@@ -61,8 +61,6 @@ jobs:
             smlnj-version: 110.99.4
           - os: macos-14
             smlnj-version: 2022.1
-          - os: macos-14
-            smlnj-version: 2023.1
 
     steps:
       - uses: actions/checkout@v4
