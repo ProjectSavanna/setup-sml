@@ -28,7 +28,7 @@
     "@actions/tool-cache": "^2.0.1",
     "@types/node": "^20.13.0",
     "@types/semver": "^7.5.8",
-    "semver": "^7.6.0"
+    "semver": "^7.6.2"
   },
   "devDependencies": {
     "prettier": "3.2.5"
