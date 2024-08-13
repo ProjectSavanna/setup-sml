@@ -83,11 +83,11 @@ jobs:
           - 2023.1
           - 2024.1
           - 2024.2
-        exclude:
-          # SML/NJ 2022.1 does not support Linux or Windows
-          - os: ubuntu-*
+        include:
+          # SML/NJ 2022.1 does not support Linux
+          - os: macos-12
             smlnj-version: 2022.1
-          - os: windows-*
+          - os: macos-latest
             smlnj-version: 2022.1
 
     steps:
