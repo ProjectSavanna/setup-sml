@@ -52,11 +52,11 @@ jobs:
         with:
           smlnj-version: ${{ matrix.smlnj-version }}
       - name: Test version output (Unix)
-        if: matrix.os != 'windows-latest'
+        if: ${{ !startsWith(matrix.os, 'windows-') }}
         run: |
           [[ $(sml @SMLversion) == "sml ${{ matrix.smlnj-version }}" ]]
       - name: Test version output (Windows)
-        if: matrix.os == 'windows-latest'
+        if: ${{ startsWith(matrix.os, 'windows-') }}
         run: |
           # "$(sml @SMLversion)" -eq "sml ${{ matrix.smlnj-version }}"
           Get-Command sml
@@ -87,12 +87,6 @@ jobs:
       - uses: ./
         with:
           smlnj-version: ${{ matrix.smlnj-version }}
-      - name: Test version output (Unix)
-        if: matrix.os != 'windows-latest'
+      - name: Test version output
         run: |
           [[ $(sml @SMLversion) == "sml ${{ matrix.smlnj-version }}" ]]
-      - name: Test version output (Windows)
-        if: matrix.os == 'windows-latest'
-        run: |
-          # "$(sml @SMLversion)" -eq "sml ${{ matrix.smlnj-version }}"
-          Get-Command sml
