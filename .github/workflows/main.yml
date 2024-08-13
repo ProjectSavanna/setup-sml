@@ -79,16 +79,8 @@ jobs:
           - macos-14
           - macos-latest
         smlnj-version:
-          - 2022.1
-          - 2023.1
           - 2024.1
           - 2024.2
-        include:
-          # SML/NJ 2022.1 does not support Linux
-          - os: macos-12
-            smlnj-version: 2022.1
-          - os: macos-latest
-            smlnj-version: 2022.1
 
     steps:
       - uses: actions/checkout@v4
