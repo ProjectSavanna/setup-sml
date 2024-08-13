@@ -8,7 +8,7 @@ on:
     - cron: '0 0 * * MON'
 
 jobs:
-  install-sml:
+  legacy:
     name: SML/NJ ${{ matrix.smlnj-version }} - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -16,58 +16,72 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04, ubuntu-latest, macos-11, windows-latest]
-        smlnj-version: [110.87, 110.97, 110.98, 110.98.1, 110.99, 110.99.2, 110.99.3, 110.99.4, 110.99.5, 2022.1, 2024.2]
-        exclude:
-          # 32-bit dependencies do not install on Ubuntu 22.04+
-          - os: ubuntu-latest
-            smlnj-version: 110.87
-          - os: ubuntu-latest
-            smlnj-version: 110.97
-          # SML/NJ versions before 110.98 do not support Big Sur
-          - os: macos-11
-            smlnj-version: 110.87
-          - os: macos-11
-            smlnj-version: 110.97
-          # SML/NJ 2022.1 does not support Linux or Windows
-          - os: ubuntu-latest
-            smlnj-version: 2022.1
-          - os: ubuntu-20.04
-            smlnj-version: 2022.1
-          - os: windows-latest
-            smlnj-version: 2022.1
-          # SML/NJ 2024.2 does not support Windows
-          - os: windows-latest
-            smlnj-version: 2024.2
+        os:
+          - ubuntu-20.04
+          - ubuntu-latest
+          - macos-12
+          - macos-13
+          - macos-14
+          - macos-latest
+          - windows-2019
+          - windows-latest
+        smlnj-version:
+          - 110.98
+          - 110.98.1
+          - 110.99
+          - 110.99.2
+          - 110.99.3
+          - 110.99.4
+          - 110.99.5
         include:
+          # SML/NJ 110.87 and 110.97
+          - os: ubuntu-20.04
+            smlnj-version: 110.87
+          - os: windows-latest
+            smlnj-version: 110.87
+          - os: ubuntu-20.04
+            smlnj-version: 110.97
+          - os: windows-latest
+            smlnj-version: 110.97
+        exclude:
+          - os: macos-12
+            smlnj-version: 110.98
+          - os: macos-12
+            smlnj-version: 110.98.1
+          - os: macos-12
+            smlnj-version: 110.99
+          - os: macos-12
+            smlnj-version: 110.99.2
+          - os: macos-13
+            smlnj-version: 110.98
+          - os: macos-13
+            smlnj-version: 110.98.1
+          - os: macos-13
+            smlnj-version: 110.99
+          - os: macos-13
+            smlnj-version: 110.99.2
+          - os: macos-13
+            smlnj-version: 110.99.3
+          - os: macos-14
+            smlnj-version: 110.98
+          - os: macos-14
+            smlnj-version: 110.98.1
+          - os: macos-14
+            smlnj-version: 110.99
+          - os: macos-14
+            smlnj-version: 110.99.2
+          - os: macos-14
+            smlnj-version: 110.99.3
+          - os: macos-latest
+            smlnj-version: 110.98
+          - os: macos-latest
+            smlnj-version: 110.98.1
+          - os: macos-latest
+            smlnj-version: 110.99
           - os: macos-latest
             smlnj-version: 110.99.2
           - os: macos-latest
             smlnj-version: 110.99.3
-          - os: macos-latest
-            smlnj-version: 110.99.4
-          - os: macos-latest
-            smlnj-version: 110.99.5
-          - os: macos-latest
-            smlnj-version: 2022.1
-          - os: macos-latest
-            smlnj-version: 2024.2
-          - os: macos-13
-            smlnj-version: 110.99.3
-          - os: macos-13
-            smlnj-version: 110.99.4
-          - os: macos-13
-            smlnj-version: 110.99.5
-          - os: macos-13
-            smlnj-version: 2022.1
-          - os: macos-13
-            smlnj-version: 2024.2
-          - os: macos-14
-            smlnj-version: 110.99.4
-          - os: macos-14
-            smlnj-version: 110.99.5
-          - os: macos-14
-            smlnj-version: 2022.1
 
     steps:
       - uses: actions/checkout@v4
@@ -75,11 +89,37 @@ jobs:
         with:
           smlnj-version: ${{ matrix.smlnj-version }}
       - name: Test version output (Unix)
-        if: matrix.os != 'windows-latest'
+        if: ${{ !startsWith(matrix.os, 'windows-') }}
         run: |
           [[ $(sml @SMLversion) == "sml ${{ matrix.smlnj-version }}" ]]
       - name: Test version output (Windows)
-        if: matrix.os == 'windows-latest'
+        if: ${{ startsWith(matrix.os, 'windows-') }}
         run: |
           # "$(sml @SMLversion)" -eq "sml ${{ matrix.smlnj-version }}"
           Get-Command sml
+
+  development:
+    name: SML/NJ ${{ matrix.smlnj-version }} - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-20.04
+          - ubuntu-latest
+          - macos-12
+          - macos-13
+        smlnj-version:
+          - 2024.1
+          - 2024.2
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          smlnj-version: ${{ matrix.smlnj-version }}
+      - name: Test version output
+        run: |
+          [[ $(sml @SMLversion) == "sml ${{ matrix.smlnj-version }}" ]]
