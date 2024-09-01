@@ -59,6 +59,7 @@ async function acquireNJGitHub(version: string): Promise<string> {
   await exec.exec("git", ["clone", "--depth", "1", "--branch", "v" + version, "--recurse-submodules", "https://github.com/smlnj/smlnj.git"]);
 
   let filename: string = util.format("boot.%s-unix.tgz", getArchitecture(version, true))
+  core.debug(`Downloading file: ${filename}`)
 
   let downloadUrl: string = util.format(
     "https://smlnj.org/dist/working/%s/%s",

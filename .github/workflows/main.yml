@@ -111,6 +111,7 @@ jobs:
           - ubuntu-latest
           - macos-12
           - macos-13
+          - macos-14
         smlnj-version:
           - 2024.1
           - 2024.2
