@@ -42,12 +42,10 @@ function defaultBits(version: string): 32 | 64 {
   return semver.satisfies(format(version), ">=110.98") ? 64 : 32;
 }
 
-function getArchitecture(version: string, armAllowed: boolean = false): string {
+function getArchitecture(version: string): string {
   switch (process.platform) {
     case "darwin":
-      core.debug(`process.arch = ${process.arch}`);
-      return defaultBits(version) == 32 ? "x86" :
-        armAllowed && process.arch.startsWith("arm") ? "arm64" : "amd64";
+      return defaultBits(version) == 32 ? "x86" : "amd64";
     case "linux":
       return "amd64";
     default:
@@ -59,7 +57,7 @@ function getArchitecture(version: string, armAllowed: boolean = false): string {
 async function acquireNJGitHub(version: string): Promise<string> {
   await exec.exec("git", ["clone", "--depth", "1", "--branch", "v" + version, "--recurse-submodules", "https://github.com/smlnj/smlnj.git"]);
 
-  let filename: string = util.format("boot.%s-unix.tgz", getArchitecture(version, true))
+  let filename: string = util.format("boot.%s-unix.tgz", getArchitecture(version))
 
   let downloadUrl: string = util.format(
     "https://smlnj.org/dist/working/%s/%s",
