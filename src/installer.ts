@@ -45,6 +45,7 @@ function defaultBits(version: string): 32 | 64 {
 function getArchitecture(version: string, armAllowed: boolean = false): string {
   switch (process.platform) {
     case "darwin":
+      core.debug(`process.arch = ${process.arch}`);
       return defaultBits(version) == 32 ? "x86" :
         armAllowed && process.arch.startsWith("arm") ? "arm64" : "amd64";
     case "linux":
@@ -66,7 +67,7 @@ async function acquireNJGitHub(version: string): Promise<string> {
     filename
   );
 
-  core.debug("Downloading SML/NJ from: " + downloadUrl);
+  core.debug(`Downloading SML/NJ from: ${downloadUrl}`);
 
   try {
     await tc.downloadTool(downloadUrl, path.join("smlnj", filename));
