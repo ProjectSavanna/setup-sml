@@ -19,7 +19,6 @@ jobs:
         os:
           - ubuntu-20.04
           - ubuntu-latest
-          - macos-12
           - macos-13
           - macos-14
           - macos-latest
@@ -45,14 +44,6 @@ jobs:
           - os: windows-latest
             smlnj-version: 110.97
         exclude:
-          - os: macos-12
-            smlnj-version: 110.98
-          - os: macos-12
-            smlnj-version: 110.98.1
-          - os: macos-12
-            smlnj-version: 110.99
-          - os: macos-12
-            smlnj-version: 110.99.2
           - os: macos-13
             smlnj-version: 110.98
           - os: macos-13
@@ -110,7 +101,6 @@ jobs:
         os:
           - ubuntu-20.04
           - ubuntu-latest
-          - macos-12
           - macos-13
         smlnj-version:
           - 2024.1
