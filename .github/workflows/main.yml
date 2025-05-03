@@ -105,6 +105,7 @@ jobs:
         smlnj-version:
           - 2024.1
           - 2024.2
+          - 2025.1
 
     steps:
       - uses: actions/checkout@v4
